@@ -114,7 +114,7 @@ code {
 .loader:before {
   width: 5.2em;
   height: 10.2em;
-  background: #0dc5c1;
+  background: #000000;
   border-radius: 10.2em 0 0 10.2em;
   top: -0.1em;
   left: -0.1em;
@@ -126,7 +126,7 @@ code {
 .loader:after {
   width: 5.2em;
   height: 10.2em;
-  background: #0dc5c1;
+  background: #000000;
   border-radius: 0 10.2em 10.2em 0;
   top: -0.1em;
   left: 4.9em;
@@ -154,4 +154,12 @@ code {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+h1.page-title {
+  border-bottom: 1px #CCC solid;
+  font-size: 1.8rem !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 20px !important;
+  padding-top: 20px !important;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container } from 'react-bootstrap';
 import Nav from './Nav';
 import Footer from './Footer';
 
@@ -6,9 +7,9 @@ const Layout = (props) => {
     return (
         <>
             <Nav></Nav>
-            <div className="container">
+            <Container>
                 {props.children}
-            </div>
+            </Container>
             <Footer></Footer>
         </>
     )
