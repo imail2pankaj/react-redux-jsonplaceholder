@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import PageTitle from '../../components/PageTitle';
@@ -7,17 +7,22 @@ import Comment from './CommentComponent';
 import { getPost, getPostComments } from '../../actions/postActions'
 
 const PostDetailsPageComponent = (props) => {
+
     const { id } = useParams();
-    const { post, getPost, getPostComments, comments } = props;
+    const dispatch = useDispatch();
+    const postReducer = useSelector(state => state.postReducer);
+
+    const { post, comments, is_loading } = postReducer;
 
     useEffect(() => {
-        getPost(id);
-        getPostComments(id);
-    }, [getPost, getPostComments, id]);
+        dispatch(getPost(id));
+        dispatch(getPostComments(id));
+        // eslint-disable-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <>
-            {props.is_loading && <Loading />}
-            {!props.is_loading && post &&
+            {is_loading && <Loading />}
+            {!is_loading && post &&
                 <div>
                     <PageTitle>{post.title}</PageTitle>
                     <p>{post.body}</p>
@@ -32,17 +37,5 @@ const PostDetailsPageComponent = (props) => {
         </>
     )
 }
-const mapStateToProps = state => {
-    return {
-        post: state.postReducer.post,
-        is_loading: state.postReducer.is_loading,
-        comments: state.postReducer.comments
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        getPost: (id) => dispatch(getPost(id)),
-        getPostComments: (id) => dispatch(getPostComments(id)),
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(PostDetailsPageComponent);
+
+export default PostDetailsPageComponent;

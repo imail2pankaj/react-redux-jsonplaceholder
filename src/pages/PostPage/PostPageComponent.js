@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Loading from '../../components/Loading';
@@ -8,8 +8,13 @@ import DeleteConfirmation from '../../components/DeleteConfirmation';
 import {
   getAllPosts
 } from '../../actions/postActions'
+
 const PostPageComponent = (props) => {
-  const { posts, getAllPosts, is_loading } = props;
+
+  const dispatch = useDispatch();  
+  const postSelector = useSelector(state => state.postReducer);
+
+  const { posts, is_loading } = postSelector;
 
   const [id, setId] = useState(null);
   const [show, showPopup] = useState(false);
@@ -21,8 +26,13 @@ const PostPageComponent = (props) => {
   };
 
   useEffect(() => {
-    getAllPosts();
-  }, [getAllPosts]);
+    getPosts();
+    // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getPosts = () => {
+    dispatch(getAllPosts());
+  }
 
   return (
     <>
@@ -63,15 +73,5 @@ const PostPageComponent = (props) => {
     </>
   )
 }
-const mapStateToProps = state => {
-  return {
-    posts: state.postReducer.posts,
-    is_loading: state.postReducer.is_loading,
-  }
-}
-const mapDispatchToProps = dispatch => {
-  return {
-    getAllPosts: () => dispatch(getAllPosts()),
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(PostPageComponent);
+
+export default PostPageComponent;

@@ -30,6 +30,9 @@
       "react-app/jest"
     ]
   },
+  "rules": {
+    "react-hooks/exhaustive-deps": 0
+  },
   "browserslist": {
     "production": [
       ">0.2%",

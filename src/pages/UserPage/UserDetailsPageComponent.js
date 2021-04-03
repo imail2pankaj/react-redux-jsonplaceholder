@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import Loading from '../../components/Loading';
@@ -7,17 +7,25 @@ import PageTitle from '../../components/PageTitle';
 import { getUser } from '../../actions/userActions'
 
 const UserDetailsPageComponent = (props) => {
+
     const { id } = useParams();
-    const { user, getUser, user: { address, company } } = props;
+    const dispatch = useDispatch();
+    const userSelector = useSelector(state => state.userReducer);
+
+    const { user, user: { address, company }, is_loading } = userSelector;
 
     useEffect(() => {
-        getUser(id);
-    }, [getUser, id]);
+        fetchUserDetails();
+    }, []);
+
+    const fetchUserDetails = () => {
+        dispatch(getUser(id));
+    }
     return (
         <>
             <PageTitle>User Page</PageTitle>
-            {props.is_loading && <Loading></Loading>}
-            {!props.is_loading && user && <div>
+            {is_loading && <Loading></Loading>}
+            {!is_loading && user && <div>
                 <Row>
                     <Col><h4>Personal Details</h4></Col>
                     <Col><h4>Contact Details</h4></Col>
@@ -47,15 +55,5 @@ const UserDetailsPageComponent = (props) => {
         </>
     )
 }
-const mapStateToProps = state => {
-    return {
-        user: state.userReducer.user,
-        is_loading: state.userReducer.is_loading
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        getUser: (id) => dispatch(getUser(id)),
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(UserDetailsPageComponent);
+
+export default UserDetailsPageComponent;

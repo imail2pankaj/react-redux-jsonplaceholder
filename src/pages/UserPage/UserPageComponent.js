@@ -1,17 +1,22 @@
 import { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import PageTitle from '../../components/PageTitle';
 import {
     getAllUsers
 } from '../../actions/userActions'
 const UserPageComponent = (props) => {
-    const { users, getAllUsers, is_loading } = props;
+    const dispatch = useDispatch()
+    const userSelector = useSelector(state => state.userReducer);
     useEffect(() => {
-        getAllUsers();
-    }, [getAllUsers]);
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
+        dispatch(getAllUsers());
+    }
     return (
         <>
             <PageTitle>Users</PageTitle>
@@ -26,15 +31,15 @@ const UserPageComponent = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {is_loading ? <tr><td colSpan="5"><Loading></Loading></td></tr> :
-                        users.map(user => (
+                    {userSelector.is_loading ? <tr><td colSpan="5"><Loading></Loading></td></tr> :
+                        userSelector.users.map(user => (
                             <tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.name}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
                                 <td>
-                                    <NavLink to={'/users/' + user.id}>View</NavLink>
+                                    <Link to={'/users/' + user.id}>View</Link>
                                 </td>
                             </tr>
                         ))
@@ -44,15 +49,5 @@ const UserPageComponent = (props) => {
         </>
     )
 }
-const mapStateToProps = state => {
-    return {
-        users: state.userReducer.users,
-        is_loading: state.userReducer.is_loading,
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        getAllUsers: () => dispatch(getAllUsers()),
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(UserPageComponent);
+
+export default UserPageComponent;
